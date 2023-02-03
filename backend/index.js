@@ -1,10 +1,12 @@
-const express = require('express')
-const cors = require('cors')
-require('dotenv').config()
+import mongo_db from './db/mongodb/mongo_db.js'
+
+import express, { json } from 'express'
+import cors from 'cors'
+import "dotenv/config.js";
 const PORT = process.env.PORT
 
 const app = express()
-app.use(express.json())
+app.use(json())
 app.use(cors())
 
 
@@ -16,7 +18,6 @@ app.get('/ping', (request, response) => {
     response.json('pong')
 })
 
-console.log('PORT++++++++', PORT)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
