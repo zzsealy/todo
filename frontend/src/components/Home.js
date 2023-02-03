@@ -63,6 +63,7 @@ const Home = () => {
         <div className='grid'>
             <Row>
                 <Col span={14} offset={4}>
+                    <h1>Hello World!</h1>
                     <CardGroup type='grid'>
                         {todoLists.map(todoList =>
                             <div onClick={() => handleClickTodoList({ todoList })} style={todoListStyle}>
