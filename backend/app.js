@@ -7,6 +7,7 @@ const usersRouter = require('./controller/user')
 const app = express()
 app.use(express.json())
 app.use(cors())
+app.use('/user', usersRouter)
 
 
 app.get('/', (request, response) => {

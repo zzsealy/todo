@@ -23,12 +23,16 @@ const Register = () => {
         margin: '0px 0px 0px 20px'
     }
 
-    const Register = () => {
-        const loginUrl = `${constant.baseUrl}/register`
+    const Register = (event) => {
+        event.preventDefault();
+        const loginUrl = `${constant.baseUrl}/user/register`
         const loginData = {'username': username, 'password': password, 'passwordRepeat': passwordRepeat}
         axios.post(loginUrl, loginData)
             .then((res) => {
                 console.log('收到登录返回')
+            })
+            .catch((error) => {
+                console.log(error)
             })
     }
 
