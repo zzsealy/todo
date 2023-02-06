@@ -1,8 +1,7 @@
 'use strict';
 
-import mongoose from 'mongoose';
-import chalk from 'chalk';
-import "dotenv/config.js";
+const mongoose = require('mongoose')
+require('dotenv').config()
 const URL = process.env.MONGODB_URI
 
 mongoose.connect(URL);
@@ -11,23 +10,17 @@ const db = mongoose.connection;
 
 
 db.once('open' ,() => {
-	console.log(
-    chalk.green('连接数据库成功')
-  );
+	console.info('连接数据库成功');
 })
 
 db.on('error', function(error) {
-    console.error(
-      chalk.red('Error in MongoDb connection: ' + error)
-    );
+    console.error('数据库连接失败: ' + error);
     mongoose.disconnect();
 });
 
 db.on('close', function() {
-    console.log(
-      chalk.red('数据库断开，重新连接数据库')
-    );
+    console.error('数据库断开，重新连接数据库');
     mongoose.connect(URL, {server:{auto_reconnect:true}});
 });
 
-export default db;
+module.exports = db

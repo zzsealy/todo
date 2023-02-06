@@ -5,6 +5,7 @@ import Home from './components/Home'
 import TodoList from './components/TodoList'
 import Ping from './components/Ping'
 import Login from './components/Login'
+import Register from './components/Register'
 import ProtectedRoute from './components/ProtectedRoute'
 
 // const LoginStatus = () => {
@@ -33,6 +34,7 @@ function App() {
           <Route  path='ping' element={<Ping />} />
         </Route>
       <Route exact path='login' element={<Login />} />
+      <Route exact path='register' element={<Register />} />
     </Routes>
     </>
   );

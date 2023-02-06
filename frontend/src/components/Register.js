@@ -2,11 +2,12 @@ import { useState } from "react"
 import axios from 'axios'
 
 import constant from '../constant'
-import { Link } from "react-router-dom"
 
-const Login = () => {
+
+const Register = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [passwordRepeat, setPasswordRepeat] = useState('')
 
     const loginStyle = {
         width: '200px',
@@ -22,9 +23,9 @@ const Login = () => {
         margin: '0px 0px 0px 20px'
     }
 
-    const Login = () => {
-        const loginUrl = `${constant.baseUrl}/login`
-        const loginData = {'username': username, 'password': password}
+    const Register = () => {
+        const loginUrl = `${constant.baseUrl}/register`
+        const loginData = {'username': username, 'password': password, 'passwordRepeat': passwordRepeat}
         axios.post(loginUrl, loginData)
             .then((res) => {
                 console.log('收到登录返回')
@@ -41,18 +42,23 @@ const Login = () => {
         setPassword(password)
     }
 
+    const handlePasswordRepeat = (event) => {
+        let passwordRepeat = event.target.value
+        setPasswordRepeat(passwordRepeat)
+    }
+
     return (
         <div style={loginStyle}>
-            <h1>登录</h1>
+            <h1>注册</h1>
             <form>
                 <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
                 <div style={inputStyle}><strong>密码:</strong> <input onChange={handlePassword}></input></div>
+                <div style={inputStyle}><strong>密码:</strong> <input onChange={handlePasswordRepeat}></input></div>
                 <br></br>
-                <button style={loginButtonStyle} onClick={Login}>登录</button>
-                <button style={loginButtonStyle} ><Link to='/register'>注册</Link></button>
+                <button style={loginButtonStyle} onClick={Register}>注册</button>
             </form>
         </div>
     )
 }
 
-export default Login
+export default Register
