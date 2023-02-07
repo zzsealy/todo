@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
     unique: true
   },
   // name: String,
-  passwordHash: String,
+  password: String,
 })
 
 userSchema.plugin(uniqueValidator)
