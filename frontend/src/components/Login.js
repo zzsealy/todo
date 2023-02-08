@@ -1,10 +1,12 @@
 import { useState } from "react"
 import axios from 'axios'
+import {useNavigate} from "react-router-dom"
 
 import constant from '../constant'
 import { Link } from "react-router-dom"
 
 const Login = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -22,11 +24,19 @@ const Login = () => {
         margin: '0px 0px 0px 20px'
     }
 
-    const Login = () => {
-        const loginUrl = `${constant.baseUrl}/login`
+    const Login = (event) => {
+        event.preventDefault();
+        const loginUrl = `${constant.baseUrl}/user/login`
         const loginData = {'username': username, 'password': password}
         axios.post(loginUrl, loginData)
             .then((res) => {
+                const code = res.data.code;
+                if (code === 200) {
+                    const token = res.data.token;
+                    localStorage.setItem('todo_token', token)
+                    navigate('/')
+                    console.log('登录成功')
+                }
                 console.log('收到登录返回')
             })
     }

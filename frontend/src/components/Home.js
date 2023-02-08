@@ -39,11 +39,16 @@ const Home = () => {
 
 
     const totalTodoListHooks = () => {
-        const getTodoListPath = `${constant.baseUrl}/todo`
+        const getTodoListPath = `${constant.baseUrl}/todo/todo_lists`
         axios.get(getTodoListPath)
             .then((res) => {
-                setTodoLists(res.data)
-                console.log(res);
+                const code = res.data.code;
+                if (code === 200) {
+                    setTodoLists(res.data)
+                    console.log(res);
+                } else {
+                    console.log(res.data)
+                }
           })
 
     }

@@ -1,13 +1,16 @@
 import { useState } from "react"
 import axios from 'axios'
+import { useNavigate } from "react-router-dom"
 
 import constant from '../constant'
 
 
 const Register = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [passwordRepeat, setPasswordRepeat] = useState('')
+    const [name, setName] = useState('')
 
     const loginStyle = {
         width: '200px',
@@ -26,10 +29,21 @@ const Register = () => {
     const Register = (event) => {
         event.preventDefault();
         const loginUrl = `${constant.baseUrl}/user/register`
-        const loginData = {'username': username, 'password': password, 'passwordRepeat': passwordRepeat}
+        const loginData = {
+            'username': username, 'password': password,
+            'passwordRepeat': passwordRepeat, 'name': name
+        }
         axios.post(loginUrl, loginData)
             .then((res) => {
-                console.log('收到登录返回')
+                const code = res.data.code
+                if (code === 200) {
+                    return(
+                        navigate('/login')
+                    )
+                }
+                if (code === 1001) {
+                    console.log('账户已存在')
+                }
             })
             .catch((error) => {
                 console.log(error)
@@ -51,13 +65,19 @@ const Register = () => {
         setPasswordRepeat(passwordRepeat)
     }
 
+    const handleName = (event) => {
+        let name = event.target.value
+        setName(name)
+    }
+
     return (
         <div style={loginStyle}>
             <h1>注册</h1>
             <form>
                 <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
-                <div style={inputStyle}><strong>密码:</strong> <input onChange={handlePassword}></input></div>
-                <div style={inputStyle}><strong>密码:</strong> <input onChange={handlePasswordRepeat}></input></div>
+                <div style={inputStyle}><strong>密码:</strong> <input type='password' onChange={handlePassword}></input></div>
+                <div style={inputStyle}><strong>重复密码:</strong> <input type='password' onChange={handlePasswordRepeat}></input></div>
+                <div style={inputStyle}><strong>名字:</strong> <input onChange={handleName} placeholder='输入一个昵称'></input></div>
                 <br></br>
                 <button style={loginButtonStyle} onClick={Register}>注册</button>
             </form>
