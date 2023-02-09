@@ -1,8 +1,8 @@
 'use strict';
 
 const mongoose = require('mongoose')
-require('dotenv').config()
-const URL = process.env.MONGODB_URI
+const config = require('../../utils/config')
+const URL = config.MONGODB_URI
 
 mongoose.connect(URL);
 

@@ -3,12 +3,13 @@ const mongo_db = require('./db/mongodb/mongo_db.js')
 const express = require('express')
 const cors = require('cors')
 const usersRouter = require('./controller/user')
+const todoRouter = require('./controller/todo')
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 app.use('/user', usersRouter)
-
+app.use('/todo', todoRouter)
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello World </h1>')

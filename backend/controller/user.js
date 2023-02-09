@@ -4,8 +4,8 @@ const { JsonWebTokenError } = require('jsonwebtoken')
 
 const userModel = require('../models/user')
 const usersRouter = require('express').Router()
-require('dotenv').config()
-const saltRounds = process.env.SALT_ROUNDS
+const config = require('../utils/config')
+const saltRounds = config.SALT_ROUNDS
 
 usersRouter.post('login', (request, response) => {
     const { username, password } = request.body
