@@ -50,7 +50,7 @@ usersRouter.post('/login', async (request, response) => {
                 //expiresIn: "20d" // it will be expired after 20 days
                 //expiresIn: 120 // it will be expired after 120ms
                 //expiresIn: "120s" // it will be expired after 120s
-                const token = jwt.sign({user_id: user.id},  process.env.TOKEN_KEY, {expiresIn: "10s"})
+                const token = jwt.sign({user_id: user.id},  config.TOKEN_KEY, {expiresIn: "100s"})
                 return response.status(200).json({ 'code': 200, 'token': token })
             })
             .catch(error => {

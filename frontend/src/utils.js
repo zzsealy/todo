@@ -1,16 +1,25 @@
 
 
 const requestConfig = () => {
-    const token = `Bearer ${window.localStorage.getItem('todo_token')} `
-    const config = {
-        'headers': { Authorization: token }
+    const token = window.localStorage.getItem('todo_token')
+    if (token) {
+        const authToken = `Bearer ${token} `
+        const config = {
+            'headers': { Authorization: authToken }
+        }
+        return config
     }
-    return config
+    return {}
+}
+
+const add = (a, b) => {
+    return a + b
 }
 
 
-export default {
-    config: requestConfig
+export {
+    requestConfig,
+    add
 }
 
 

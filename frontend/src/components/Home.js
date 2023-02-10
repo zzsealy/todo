@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Button, Toast, Col, Row, Card, Typography, CardGroup } from '@douyinfe/semi-ui';
 import { useNavigate  } from 'react-router-dom';
 import constant from '../constant'
-import { config } from '../utils'
+import { requestConfig, add } from '../utils'
 
 
 const Todo = ({ todo }) => {
@@ -35,20 +35,23 @@ const TodoList = ({ todoList }) => {
 }
 
 const Home = () => {
+    const navigate = useNavigate();
     const [todoLists, setTodoLists] = useState([])
 
 
     const totalTodoListHooks = () => {
 
         const getTodoListPath = `${constant.baseUrl}/todo/todo_lists`
-        axios.get(getTodoListPath, config = utils.config())
+        const config = requestConfig()
+        axios.get(getTodoListPath, config)
             .then((res) => {
                 const code = res.data.code;
                 if (code === 200) {
-                    setTodoLists(res.data)
+                    // setTodoLists(res.data)
                     console.log(res);
-                } else {
-                    console.log(res.data)
+                } 
+                if (code === 401) {
+                    navigate('/login')
                 }
           })
 
