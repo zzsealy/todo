@@ -28,12 +28,12 @@ const Register = () => {
 
     const Register = (event) => {
         event.preventDefault();
-        const loginUrl = `${constant.baseUrl}/user/register`
-        const loginData = {
+        const registerUrl = `${constant.baseUrl}/user/register`
+        const registerData = {
             'username': username, 'password': password,
             'passwordRepeat': passwordRepeat, 'name': name
         }
-        axios.post(loginUrl, loginData)
+        axios.post(registerUrl, registerData)
             .then((res) => {
                 const code = res.data.code
                 if (code === 200) {

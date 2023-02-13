@@ -1,14 +1,28 @@
 import { useState } from "react"
 import axios from 'axios'
-import {useNavigate} from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 import constant from '../constant'
-import { Link } from "react-router-dom"
+import { Banner } from '@douyinfe/semi-ui';
+
+
+
 
 const Login = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [showBanner, setShowBanner] = useState(false)
+
+    const changeShowBanner = () => {
+        setShowBanner(!showBanner)
+    }
+
+    const LoginBanner = (
+        <Banner onClose={changeShowBanner} type='warning'
+            description="密码错误"
+        />
+    )
 
     const loginStyle = {
         width: '200px',
@@ -26,6 +40,7 @@ const Login = () => {
 
     const Login = (event) => {
         event.preventDefault();
+        localStorage.removeItem('todo_token')
         const loginUrl = `${constant.baseUrl}/user/login`
         const loginData = {'username': username, 'password': password}
         axios.post(loginUrl, loginData)
@@ -36,6 +51,9 @@ const Login = () => {
                     localStorage.setItem('todo_token', token)
                     navigate('/')
                     console.log('登录成功')
+                }
+                if (code === 400) { // 验证失败
+                    setShowBanner(true)
                 }
                 console.log('收到登录返回')
             })
@@ -54,6 +72,7 @@ const Login = () => {
     return (
         <div style={loginStyle}>
             <h1>登录</h1>
+            {showBanner? LoginBanner: null}
             <form>
                 <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
                 <div style={inputStyle}><strong>密码:</strong> <input onChange={handlePassword}></input></div>

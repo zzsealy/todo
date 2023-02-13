@@ -6,7 +6,8 @@ const getTokenForm = require('../utils/common_func').getTokenForm
 const config = require('../utils/config')
 
 const notNeedTokenUrl = {
-  '/user/login': ['GET', 'POST']
+  '/user/login': ['GET', 'POST'],
+  '/user/register': ['GET', 'POST']
 }
 
 const requestLogger = (request, response, next) => {
@@ -35,8 +36,8 @@ const verifyToken = async (request, response, next) => {
       try {
         const decodedToken = jwt.verify(token, config.TOKEN_KEY)
         const user_id = decodedToken.user_id
-        user = await userModel.findOne({ 'id': user_id })
-        const userInfo = { 'userName': user.username, 'userId': user.id }
+        const findUser = await userModel.findById(user_id).exec();
+        const userInfo = { 'userName': findUser.username, 'userId': findUser.id , 'name': findUser.name}
         request.userInfo = userInfo
         console.log(userInfo)
       } catch (error) {

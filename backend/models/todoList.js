@@ -23,3 +23,17 @@ const TodoListSchema = mongoose.Schema({
 })
 
 
+TodoListSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString()
+      delete returnedObject._id
+      delete returnedObject.__v
+      // the passwordHash should not be revealed
+    }
+  })
+  
+  const TodoList = mongoose.model('TodoList', TodoListSchema)
+  
+  module.exports = TodoList
+
+

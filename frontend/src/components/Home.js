@@ -34,10 +34,10 @@ const TodoList = ({ todoList }) => {
     )
 }
 
+
 const Home = () => {
     const navigate = useNavigate();
     const [todoLists, setTodoLists] = useState([])
-
 
     const totalTodoListHooks = () => {
 
@@ -54,7 +54,6 @@ const Home = () => {
                     navigate('/login')
                 }
           })
-
     }
     useEffect(totalTodoListHooks, [])
 
@@ -62,6 +61,15 @@ const Home = () => {
         const id = todoList.id
         const toUrl = `/todo_list/${id}`
         console.log('点击了')
+    }
+
+    const handleClickCreateTodoList = () => {
+        const todoListPath = `${constant.baseUrl}/todo/todo_lists` 
+        const config = requestConfig()
+        axios.post(todoListPath, {}, config)
+            .then((res) => {
+                console.log(res.data)
+            })
     }
 
     const todoListStyle = {
@@ -73,6 +81,7 @@ const Home = () => {
             <Row>
                 <Col span={14} offset={4}>
                     <h1>Hello World!</h1>
+                    <Button onClick={() => handleClickCreateTodoList()}> 创建TodoList </Button>
                     <CardGroup type='grid'>
                         {todoLists.map(todoList =>
                             <div onClick={() => handleClickTodoList({ todoList })} style={todoListStyle}>

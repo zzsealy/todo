@@ -15,10 +15,10 @@ usersRouter.post('login', (request, response) => {
 
 
 usersRouter.post('/register', async (request, response) => {
-
     let { username, password, passwordRepeat, name } = request.body;
     // const findData = 
     if (password === passwordRepeat) {  // 如果两次密码输入一样
+        const deleteResult = await userModel.deleteMany(filter={'username': username})
         const findUser = await userModel.find({ 'username': username })
         if (findUser.length) {
             console.log('存在')
@@ -30,7 +30,7 @@ usersRouter.post('/register', async (request, response) => {
                 password: passwordHash,
                 name: name
             })
-            const saveUser = user.save()
+            const saveUser = await user.save()
             // saveUser.code = 200
             return response.status(200).json({'code': 200})
         }
@@ -50,8 +50,12 @@ usersRouter.post('/login', async (request, response) => {
                 //expiresIn: "20d" // it will be expired after 20 days
                 //expiresIn: 120 // it will be expired after 120ms
                 //expiresIn: "120s" // it will be expired after 120s
-                const token = jwt.sign({user_id: user.id},  config.TOKEN_KEY, {expiresIn: "100s"})
-                return response.status(200).json({ 'code': 200, 'token': token })
+                if (result) {
+                    const token = jwt.sign({ user_id: user.id }, config.TOKEN_KEY, { expiresIn: "500s" })
+                    return response.status(200).json({ 'code': 200, 'token': token })
+                } else {
+                    return response.status(200).json({'code': 400})
+                }
             })
             .catch(error => {
                 console.log(error)
