@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const Schema = mongoose.Schema;
 
 // notes: [
 //     {
@@ -9,19 +9,21 @@ const mongoose = require('mongoose')
 //   ],
 
 
-const TodoListSchema = mongoose.Schema({
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    child_todo: [
+const TodoListSchema = new Schema({
+    userId: String,
+    childTodo: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Todo'
         }
-    ] 
+    ],
+    finishRate: String,
+    createDateTime: Date,
+    closeDateTime: Date,
+    canChange: Boolean
 })
 
+TodoListSchema.index({ userId: 1 })
 
 TodoListSchema.set('toJSON', {
     transform: (document, returnedObject) => {

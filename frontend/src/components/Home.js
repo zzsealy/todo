@@ -15,7 +15,7 @@ const Todo = ({ todo }) => {
 }
 
 const TodoList = ({ todoList }) => {
-    const title = todoList.finish_rate + '  ' + todoList.create_datetime
+    const title = todoList.finishRate + '  ' + todoList.create_datetime
     const { Text } = Typography;
     return (
         <Card title = {title}
@@ -28,7 +28,7 @@ const TodoList = ({ todoList }) => {
         }
         >  
             <ul>
-                {todoList.child_todo.map(todo => <Todo key={todo.id} todo={todo}/>)}
+                {todoList.childTodo.map(todo => <Todo key={todo.id} todo={todo}/>)}
             </ul>
         </Card>
     )
@@ -47,7 +47,7 @@ const Home = () => {
             .then((res) => {
                 const code = res.data.code;
                 if (code === 200) {
-                    // setTodoLists(res.data)
+                    setTodoLists(res.data.todoList)
                     console.log(res);
                 } 
                 if (code === 401) {
@@ -55,11 +55,12 @@ const Home = () => {
                 }
           })
     }
-    useEffect(totalTodoListHooks, [])
+    useEffect(totalTodoListHooks, todoLists)
 
     const handleClickTodoList = ({todoList}) => {
         const id = todoList.id
         const toUrl = `/todo_list/${id}`
+        navigate(toUrl)
         console.log('点击了')
     }
 
