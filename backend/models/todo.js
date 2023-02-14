@@ -1,12 +1,25 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 
 
 
-
-const TodoSchema = mongoose.Schema({
-    content: {
-        type: String,
-        required: true,
-        is_finish: Boolean
-    }
+const TodoSchema = new Schema({
+    content: String,
+    isFinish: Boolean,
+    createDateTime: Date,
+    closeDateTime: Date,
 })
+
+
+TodoSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString()
+      delete returnedObject._id
+      delete returnedObject.__v
+      // the passwordHash should not be revealed
+    }
+  })
+  
+  const Todo = mongoose.model('Todo', TodoSchema)
+  
+  module.exports = Todo

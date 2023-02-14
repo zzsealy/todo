@@ -7,12 +7,6 @@ const usersRouter = require('express').Router()
 const config = require('../utils/config')
 const saltRounds = config.SALT_ROUNDS
 
-usersRouter.post('login', (request, response) => {
-    const { username, password } = request.body
-    const findData = {'username': username}
-    userModel.findOne({findData})
-})
-
 
 usersRouter.post('/register', async (request, response) => {
     let { username, password, passwordRepeat, name } = request.body;
