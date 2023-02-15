@@ -1,10 +1,11 @@
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet, useNavigate } from "react-router-dom"
 
 
 const ProtectedRoute = ({ user }) => {
+    const navigate = useNavigate();
     if (!user) {
         return (
-            <Navigate to='/login' replace />
+            navigate('/login')
         )
     } else {
         return (

@@ -58,5 +58,10 @@ todoRouter.post('/todo_lists', async (request, response) => {
 })
 
 
+todoRouter.post('todo/todo/:id', async (request, response) => {
+        const todoList = await todoModel.findById(request.params.id)
+})
+
+
 
 module.exports = todoRouter

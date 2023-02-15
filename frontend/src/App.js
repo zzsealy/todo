@@ -28,10 +28,10 @@ function App() {
       {/* <LoginStatus/> */}
       
     <Routes>
-      <Route exact path='/' element={<Home />} />
-      <Route exact path='todo_list/:id' element={<TodoList />} />
         <Route element={<ProtectedRoute user={{'user': 'drq'}} />}>
-          <Route  path='ping' element={<Ping />} />
+          <Route path='ping' element={<Ping />} />
+          <Route exact path='/' element={<Home />} />
+          <Route exact path='todo_list/:id' element={<TodoList />} />
         </Route>
       <Route exact path='login' element={<Login />} />
       <Route exact path='register' element={<Register />} />

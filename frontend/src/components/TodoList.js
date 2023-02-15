@@ -2,8 +2,8 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import { Button, Toast, Col, Row, Card, Typography, CardGroup, List, Avatar, ButtonGroup, Input  } from '@douyinfe/semi-ui';
-import { requestConfig, add } from '../utils'
+import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox  } from '@douyinfe/semi-ui';
+import { requestConfig } from '../utils'
 import constant from '../constant'
 
 
@@ -26,7 +26,7 @@ const TodoList = () => {
                 }
             })
     }
-    useEffect(getTodoListHook, todoList)
+    useEffect(getTodoListHook, todos)
 
     const handleEnterPress = (event) => {
         const value = event.target.value
@@ -40,6 +40,12 @@ const TodoList = () => {
                     setTodos(res.data.todoList.childTodo)
                 }
             })
+    }
+
+
+    const handleFinishTodoCheck = ({ checked, todo }) => {
+        console.log('checked:', checked)
+        console.log('item:', todo)
     }
 
 
@@ -58,7 +64,7 @@ const TodoList = () => {
                             }
                             extra={
                                 <ButtonGroup theme="borderless">
-                                    <Button>点击完成</Button>
+                                    <Checkbox onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
                                 </ButtonGroup>
                             }
                         />

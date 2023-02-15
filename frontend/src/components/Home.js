@@ -38,7 +38,6 @@ const TodoList = ({ todoList }) => {
 const Home = () => {
     const navigate = useNavigate();
     const [todoLists, setTodoLists] = useState([])
-
     const totalTodoListHooks = () => {
 
         const getTodoListPath = `${constant.baseUrl}/todo/todo_lists`
