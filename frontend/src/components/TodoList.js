@@ -13,6 +13,7 @@ const TodoList = () => {
     const params = useParams()
     const [todoList, setTodoList] = useState({})
     const [todos, setTodos] = useState([])
+    const [count, setCount] = useState(0)
     const getTodoListHook = () => {
         const getPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
         axios.get(getPath, config)
@@ -26,7 +27,7 @@ const TodoList = () => {
                 }
             })
     }
-    useEffect(getTodoListHook, todos)
+    useEffect(getTodoListHook, [count])
 
     const handleEnterPress = (event) => {
         const value = event.target.value
@@ -38,12 +39,22 @@ const TodoList = () => {
                 if(res.data.code === 200){
                     setTodoList(res.data.todoList)
                     setTodos(res.data.todoList.childTodo)
+                    setCount(count+1)
                 }
             })
     }
 
 
     const handleFinishTodoCheck = ({ checked, todo }) => {
+        // const checkStatus = checked.target.checked;
+        const todoId = todo.id
+        const changeTodoStatusPath = `${constant.baseUrl}/todo/todo/${todoId}`
+        axios.put(changeTodoStatusPath, {}, config)
+            .then((res) => {
+                if(res.data.code === 200) {
+                    setCount(count+1) // 更新列表
+                }
+            })
         console.log('checked:', checked)
         console.log('item:', todo)
     }
@@ -59,12 +70,19 @@ const TodoList = () => {
                             // header={<Avatar color="blue">SE</Avatar>}
                             main={
                                 <div>
-                                    <span style={{ color: 'var(--semi-color-text-0)', fontWeight: 500 }}>{todo.content}</span>
+                                    {
+                                        todo.isFinish
+                                        ?<h4 style={{ color: 'var(--semi-color-text-0)', fontWeight: 500, 'text-decoration': 'line-through' }}>{todo.content}</h4>
+                                        :<h4 style={{ color: 'var(--semi-color-text-0)', fontWeight: 500 }}>{todo.content}</h4>
+                                    }
                                 </div>
                             }
                             extra={
                                 <ButtonGroup theme="borderless">
-                                    <Checkbox onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                                    {todo.isFinish
+                                        ?<Checkbox defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                                        :<Checkbox onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                                    }
                                 </ButtonGroup>
                             }
                         />

@@ -9,23 +9,18 @@ import { requestConfig, add } from '../utils'
 const Todo = ({ todo }) => {
     return (
         <li>
-            {todo.body}
+            {todo.content}
        </li>
    ) 
 }
 
 const TodoList = ({ todoList }) => {
-    const title = todoList.finishRate + '  ' + todoList.create_datetime
-    const { Text } = Typography;
+    const title = `完成时间 ${todoList.createDateTime}`
     return (
         <Card title = {title}
             style={{ maxWidth: 250, display: 'inline-block', }}
             shadows='hover'
-            headerExtraContent={
-                <Text >
-                    查看详情
-                </Text>
-        }
+           
         >  
             <ul>
                 {todoList.childTodo.map(todo => <Todo key={todo.id} todo={todo}/>)}
@@ -38,6 +33,7 @@ const TodoList = ({ todoList }) => {
 const Home = () => {
     const navigate = useNavigate();
     const [todoLists, setTodoLists] = useState([])
+    const [count, setCount] = useState(0)
     const totalTodoListHooks = () => {
 
         const getTodoListPath = `${constant.baseUrl}/todo/todo_lists`
@@ -54,9 +50,10 @@ const Home = () => {
                 }
           })
     }
-    useEffect(totalTodoListHooks, todoLists)
+    useEffect(totalTodoListHooks, [count])
 
     const handleClickTodoList = ({todoList}) => {
+        // 点击单个的todo list 跳转到todo list 详情
         const id = todoList.id
         const toUrl = `/todo_list/${id}`
         navigate(toUrl)
@@ -64,6 +61,7 @@ const Home = () => {
     }
 
     const handleClickCreateTodoList = () => {
+        // 点击创建新的todo list
         const todoListPath = `${constant.baseUrl}/todo/todo_lists` 
         const config = requestConfig()
         axios.post(todoListPath, {}, config)
