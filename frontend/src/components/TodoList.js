@@ -2,12 +2,13 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox  } from '@douyinfe/semi-ui';
+import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox, Layout  } from '@douyinfe/semi-ui';
 import { requestConfig } from '../utils'
 import constant from '../constant'
 
 
 const TodoList = () => {
+    const { Header, Footer, Sider, Content } = Layout
     const navigate = useNavigate();
     const config = requestConfig()
     const params = useParams()
@@ -61,36 +62,59 @@ const TodoList = () => {
 
 
     return (
-        <Row>
-                <Col span={10} offset={8}>
-                    <List
-                    dataSource={todos}
-                    renderItem={todo => (
-                        <List.Item
-                            // header={<Avatar color="blue">SE</Avatar>}
-                            main={
-                                <div>
-                                    {
-                                        todo.isFinish
-                                        ?<h4 style={{ color: 'var(--semi-color-text-0)', fontWeight: 500, 'text-decoration': 'line-through' }}>{todo.content}</h4>
-                                        :<h4 style={{ color: 'var(--semi-color-text-0)', fontWeight: 500 }}>{todo.content}</h4>
+        <Layout className="components-layout-demo">
+            <Header>
+                <Row>  
+                        <Col span={10} offset={8}>
+                            <h1>标题</h1>
+                        </Col>
+                </Row>
+            </Header>
+            <Layout>
+                <Sider></Sider>
+                <Content>
+                    <Row>
+                        <Col span={10} offset={7}>
+                            <div
+                            className="divi-line"
+                            style={{"float": "left", "width": "2px", "height": "1000px", "background": "#c8c8c8"}}
+                            ></div>
+                            <List
+                            dataSource={todos}
+                            renderItem={todo => (
+                                <List.Item
+                                    // header={<Avatar color="blue">SE</Avatar>}
+                                    main={
+                                        <div>
+                                            {
+                                                todo.isFinish
+                                                ?<h4 style={{ color: 'var(--semi-color-success-light-active)', fontWeight: 600, 'text-decoration': 'line-through', 'margin': '5px', }}>{todo.content}</h4>
+                                                :<h4 style={{ color: 'var( --semi-color-warning-light-active)', fontWeight: 600, 'margin': '5px' }}>{todo.content}</h4>
+                                            }
+                                        </div>
                                     }
-                                </div>
-                            }
-                            extra={
-                                <ButtonGroup theme="borderless">
-                                    {todo.isFinish
-                                        ?<Checkbox defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
-                                        :<Checkbox onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                                    extra={
+                                        <ButtonGroup theme="borderless">
+                                            {todo.isFinish
+                                                ?<Checkbox defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                                                :<Checkbox onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                                            }
+                                        </ButtonGroup>
                                     }
-                                </ButtonGroup>
-                            }
-                        />
-                    )}
-                    />
-                <Input insetLabel='新的todo:' onEnterPress={handleEnterPress}></Input>
-                </Col>
-        </Row>
+                                />
+                                )}
+                            />
+                            <Input insetLabel='新的todo:' onEnterPress={handleEnterPress}></Input>
+                        </Col>
+                        <div
+                            className="divi-line"
+                            style={{"float": "left", "width": "2px", "height": "1000px", "background": "#c8c8c8"}}
+                        ></div>
+                    </Row>
+                </Content>
+            </Layout>
+            <Footer></Footer>
+        </Layout>
     )
 }
 
