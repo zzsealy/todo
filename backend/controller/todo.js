@@ -29,21 +29,48 @@ todoRouter.get('/todo_lists', async (request, response) => {
        
         const userInfo = request.userInfo
         const todoLists = await todoListModel.find({'userId': userInfo.userId}).populate('childTodo')
-        return response.status(200).json({'code': 200 , 'todoList': todoLists})
+        // todoLists.forEach(todoList => {
+        //         const finishDateString = todoList.finishDate.toLocaleString();
+        //         const dateSplit = finishDateString.split(',')[0].split('/');
+        //         const dateString = `${dateSplit[2]}-${dateSplit[0]}-${dateSplit[1]}`;
+        //         todoList.dateString = dateString;
+        // });
+        const newTotoLists = []
+        todoLists.map(todoList => {
+                const finishDateString = todoList.finishDate.toLocaleString();
+                const dateSplit = finishDateString.split(',')[0].split('/');
+                const dateString = `${dateSplit[2]}-${dateSplit[0]}-${dateSplit[1]}`;
+                todoList.finishDate = dateString;
+                const newTodoList = {
+                        "finishDate": dateString,
+                        "title": todoList.title,
+                        "id": todoList.id,
+                        "childTodo": todoList.childTodo,
+                        "canChange": todoList.canChange,
+                        "closeDateTime": todoList.closeDateTime
+                }
+                newTotoLists.push(newTodoList)
+        })
+        return response.status(200).json({'code': 200 , 'todoList': newTotoLists})
 })
 
 
 todoRouter.post('/todo_lists', async (request, response) => {
         // const a = await todoListModel.deleteMany({})
+        const { title, dateString } = request.body;
         const userInfo = request.userInfo
+        const finishDate = new Date(dateString.replace('-', '/'))
         const todoList = new todoListModel({
                 userId: userInfo.userId,
+                title: title,
+                finishDate: finishDate,
                 childTodo: [],
                 createDateTime: Date(),
-                canChange: true
+                canChange: true,
+                
         })
         const saveTodoList = await todoList.save()
-        return response.status(200).json(saveTodoList)
+        return response.status(200).json({ "code": 200, "saveData": "saveTodoList" })
 })
 
 

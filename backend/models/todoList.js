@@ -11,6 +11,8 @@ const Schema = mongoose.Schema;
 
 const TodoListSchema = new Schema({
     userId: String,
+    title: String,
+    finishDate: Date, // 预计的完成时间
     childTodo: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -18,8 +20,8 @@ const TodoListSchema = new Schema({
         }
     ],
     finishRate: String,
-    createDateTime: Date,
-    closeDateTime: Date,
+    createDateTime: Date,  // 创建时间
+    closeDateTime: Date,  // 关闭时间
     canChange: Boolean
 })
 
