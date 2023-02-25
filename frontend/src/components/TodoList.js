@@ -27,6 +27,7 @@ const TodoList = () => {
                     setTodos(res.data.todoList.childTodo)
                     setDateString(res.data.dateString)
                     setNewTodo('')
+                    document.title = res.data.todoList.title 
                 }
                 if (res.data.code === 401) {
                     navigate('/login')

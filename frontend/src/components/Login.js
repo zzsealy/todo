@@ -75,7 +75,7 @@ const Login = () => {
             {showBanner? LoginBanner: null}
             <form>
                 <div style={inputStyle}><strong>账号:</strong> <input onChange={handleUsername}></input></div>
-                <div style={inputStyle}><strong>密码:</strong> <input onChange={handlePassword}></input></div>
+                <div style={inputStyle} ><strong>密码:</strong> <input type='password' onChange={handlePassword}></input></div>
                 <br></br>
                 <button style={loginButtonStyle} onClick={Login}>登录</button>
                 <button style={loginButtonStyle} ><Link to='/register'>注册</Link></button>

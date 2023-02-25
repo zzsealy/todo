@@ -45,7 +45,7 @@ usersRouter.post('/login', async (request, response) => {
                 //expiresIn: 120 // it will be expired after 120ms
                 //expiresIn: "120s" // it will be expired after 120s
                 if (result) {
-                    const token = jwt.sign({ user_id: user.id }, config.TOKEN_KEY, { expiresIn: "500s" })
+                    const token = jwt.sign({ user_id: user.id }, config.TOKEN_KEY, { expiresIn: "864000s" })
                     return response.status(200).json({ 'code': 200, 'token': token })
                 } else {
                     return response.status(200).json({'code': 400})

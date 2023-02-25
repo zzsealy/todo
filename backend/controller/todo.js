@@ -31,14 +31,25 @@ todoRouter.post('/todo_lists/:id', async (request, response) => {
         return response.status(200).json({'code':200, 'todoList': todoListSave })
 })
 
+const getFinishRate = (totalTodo) => {
+        const allTodoNum = totalTodo.length;
+        let finishNum = 0
+        totalTodo.map(todo => {
+                if (todo.isFinish) {
+                        finishNum += 1
+                }
+        })
+        return String(finishNum) + '/' + String(allTodoNum)
+}
 
 todoRouter.put('/todo_lists/:id', async (request, response) => {
         let { type } = request.body
         if (type === 'close') {
-            const todoList = await todoListModel.findById(request.params.id)
+            const todoList = await todoListModel.findById(request.params.id).populate('childTodo')
             todoList.canChange = false;
             todoList.finishDate = Date();
             todoList.closeDateTime = Date()
+            todoList.finishRate = getFinishRate(todoList.childTodo)
             const todoListSave = await todoList.save()
             return response.status(200).json({'code':200, 'todoList': todoListSave})
                 

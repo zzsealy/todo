@@ -84,7 +84,8 @@ const Home = () => {
                 if (code === 401) {
                     navigate('/login')
                 }
-          })
+            })
+        document.title = 'todoList清单'
     }
     useEffect(totalTodoListHooks, [count, todoListNum, currentPage, navigate])
 
