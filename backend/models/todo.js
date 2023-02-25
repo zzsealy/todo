@@ -7,7 +7,6 @@ const TodoSchema = new Schema({
     content: String,
     isFinish: Boolean,
     createDateTime: Date,
-    closeDateTime: Date,
 })
 
 

@@ -58,4 +58,10 @@ usersRouter.post('/login', async (request, response) => {
     }
 })
 
+
+usersRouter.get('/user_info', async (request, response) => {
+    const userInfo = request.userInfo
+    return response.status(200).json({'code':200, 'userInfo': userInfo})
+})
+
 module.exports = usersRouter
