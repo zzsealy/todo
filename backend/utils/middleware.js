@@ -6,8 +6,8 @@ const getTokenForm = require('../utils/common_func').getTokenForm
 const config = require('../utils/config')
 
 const notNeedTokenUrl = {
-  '/user/login': ['GET', 'POST'],
-  '/user/register': ['GET', 'POST']
+  '/api/user/login': ['GET', 'POST'],
+  '/api/user/register': ['GET', 'POST']
 }
 
 const requestLogger = (request, response, next) => {

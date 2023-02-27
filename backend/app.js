@@ -8,16 +8,13 @@ const usersRouter = require('./controller/user')
 const todoRouter = require('./controller/todo')
 
 const app = express()
-app.use(cors({
-    origin: ['http://www.dairuiquan.xyz', 'https://www.dairuiquan.xyz'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE']
-}))
+app.use(cors())
 app.use(express.json())
 app.use(middleware.requestLogger)
 app.use(middleware.verifyToken)
 
-app.use('/user', usersRouter)
-app.use('/todo', todoRouter)
+app.use('/api/user', usersRouter)
+app.use('/api/todo', todoRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
