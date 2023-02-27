@@ -8,8 +8,8 @@ const usersRouter = require('./controller/user')
 const todoRouter = require('./controller/todo')
 
 const app = express()
-app.use(express.json())
 app.use(cors())
+app.use(express.json())
 app.use(middleware.requestLogger)
 app.use(middleware.verifyToken)
 
