@@ -1,5 +1,5 @@
 
-const baseUrl = 'http://www.dairuiquan/api'
+const baseUrl = 'http://www.dairuiquan.xyz/api'
 
 const constant = {
     baseUrl: baseUrl
