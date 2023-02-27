@@ -8,7 +8,9 @@ const usersRouter = require('./controller/user')
 const todoRouter = require('./controller/todo')
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: ['http://www.dairuiquan.xyz', 'https://www.dairuiquan.xyz']
+}))
 app.use(express.json())
 app.use(middleware.requestLogger)
 app.use(middleware.verifyToken)
