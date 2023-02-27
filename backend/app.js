@@ -9,7 +9,8 @@ const todoRouter = require('./controller/todo')
 
 const app = express()
 app.use(cors({
-    origin: ['http://www.dairuiquan.xyz', 'https://www.dairuiquan.xyz']
+    origin: ['http://www.dairuiquan.xyz', 'https://www.dairuiquan.xyz'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE']
 }))
 app.use(express.json())
 app.use(middleware.requestLogger)
