@@ -1,4 +1,5 @@
-const baseUrl = 'http://localhost:3001/api'
+
+const baseUrl = 'http://www.dairuiquan/api'
 
 const constant = {
     baseUrl: baseUrl
