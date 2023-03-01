@@ -128,10 +128,6 @@ const TodoList = () => {
                 <Content>
                     <Row>
                         <Col span={10} offset={7}>
-                            <div
-                            className="divi-line"
-                            style={{"float": "left", "width": "2px", "height": "1000px", "background": "#c8c8c8"}}
-                            ></div>
                             <List
                             dataSource={todos}
                             renderItem={todo => (
@@ -157,15 +153,8 @@ const TodoList = () => {
                                 />
                                 )}
                             />
-                            {todoList.canChange ?
                                 <Input insetLabel='新todo(回车创建):' value={newTodo} onChange={handleInputTodo} onEnterPress={handleEnterPress}></Input> 
-                                : <br></br>
-                            }  
                         </Col>
-                        <div
-                            className="divi-line"
-                            style={{"float": "left", "width": "2px", "height": "1000px", "background": "#c8c8c8"}}
-                        ></div>
                     </Row>
                 </Content>
             </Layout>
