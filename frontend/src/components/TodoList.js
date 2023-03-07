@@ -2,7 +2,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox, Layout  } from '@douyinfe/semi-ui';
+import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox, Layout, Popconfirm  } from '@douyinfe/semi-ui';
 import { requestConfig } from '../utils'
 import constant from '../constant'
 
@@ -90,6 +90,7 @@ const TodoList = () => {
             axios.put(todoListPath, { "type": type }, config)
                 .then((res) => {
                     if (res.data.code === 200) {
+                        Toast.success('关闭成功！');
                         setCount(count + 1)  // 重新获取todoList， 不能创建新的todo了
                     }
                 })
@@ -106,20 +107,36 @@ const TodoList = () => {
         }
     }
 
+    const onCancel = () => {
+        console.log('取消了')
+    }
+
 
     return (
         <Layout className="components-layout-demo">
             <Header>
                 <Row>  
                         <Col span={10} offset={7}>
-                            <h1 style={{ 'maxWidth': '100%', "color": "#c8c8c8", "display":"inline", }}>{todoList.title}</h1>
+                            <h1 style={{ 'maxWidth': '100%', "color": "#000", "display":"inline", }}>{todoList.title}</h1>
                         </Col>
                         <Col span={3} offset={1}>
-                        <h1 style={{ 'maxWidth': '100%', "color": "#c8c8c8", "display":"inline", }}>{dateString}</h1>
+                        <h1 style={{ 'maxWidth': '100%', "color": "rgba(var(--semi-lime-5), 1)", "display":"inline", }}>{dateString}</h1>
                         </Col>
-                        <Col span={2} offset={1}>
-                            <Button onClick={() => handleClickChangeTodoList('close')}>关闭</Button>
-                            <Button onClick={() =>handleClickChangeTodoList('del')}>删除</Button>
+                    <Col span={2} offset={1}>
+                        <Popconfirm
+                            title="确认关闭这个待办集合？"
+                            content="此修改不可逆,关闭之后这个待办集合不再支持修改待办。"
+                            onConfirm={() => handleClickChangeTodoList('close')}
+                            onCancel={onCancel}>
+                            <Button>关闭</Button>
+                        </Popconfirm>
+                        <Popconfirm
+                            title='确认删除这个待办集合？'
+                            content='此操作不可逆'
+                            onConfirm={() => handleClickChangeTodoList('del')}
+                            onCancel={oncancel}>
+                            <Button type="danger">删除</Button>
+                        </Popconfirm>
                         </Col>
                 </Row>
             </Header>
@@ -137,8 +154,8 @@ const TodoList = () => {
                                         <div>
                                             {
                                                 todo.isFinish
-                                                ?<h2 style={{ color: 'var(--semi-color-success-light-active)', fontWeight: 600, 'textDecoration': 'line-through' }}>{todo.content}</h2>
-                                                :<h2 style={{ color: 'var( --semi-color-warning-light-active)', fontWeight: 600,  }}>{todo.content}</h2>
+                                                ?<h2 style={{ color: 'rgba(var(--semi-grey-7), 1)', fontWeight: 600, 'textDecoration': 'line-through' }}>{todo.content}</h2>
+                                                :<h2 style={{ color: 'rgba(var(--semi-grey-3), 1)', fontWeight: 600,  }}>{todo.content}</h2>
                                             }
                                         </div>
                                     }

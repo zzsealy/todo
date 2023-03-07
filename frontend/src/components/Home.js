@@ -24,7 +24,7 @@ const Todo = ({ todo }) => {
 }
 
 const TodoList = ({ todoList }) => {
-    const title = `完成时间 ${todoList.finishDate}`
+    const title = `${todoList.title}`
     let blankLi = []
     if (todoList.childTodo.length < 4) {
         for (let i = todoList.childTodo.length; i < 4; i++){
@@ -43,8 +43,9 @@ const TodoList = ({ todoList }) => {
                     '....' : ''
                 }
             </ul>
-                {todoList.canChange === true ? <p style={{'float': 'right', 'color': 'rgba(var(--semi-lime-5), 1)'}}>进行中</p>
-                    : <p style={{'float': 'right', 'color': 'rgba(var(--semi-yellow-4), 1)'}}>关闭</p>}
+                {todoList.canChange === true ? <p style={{'float': 'right', 'color': 'rgba(var(--semi-lime-5), 1)'}}>进行</p>
+                    : <p style={{'float': 'right', 'color': 'rgba(var(--semi-yellow-4), 1)', }}>关闭</p>}
+            <small style={{'color': 'rgba(var(--semi-grey-4), 1)'}}>{`完成时间 ${todoList.finishDate}`}</small>
         </Card>
     )
 }
@@ -85,7 +86,7 @@ const Home = () => {
                     navigate('/login')
                 }
             })
-        document.title = 'todoList清单'
+        document.title = '待办事项|DRQ'
     }
     useEffect(totalTodoListHooks, [count, todoListNum, currentPage, navigate])
 
