@@ -134,7 +134,7 @@ const TodoList = () => {
                             title='确认删除这个待办集合？'
                             content='此操作不可逆'
                             onConfirm={() => handleClickChangeTodoList('del')}
-                            onCancel={oncancel}>
+                            onCancel={onCancel}>
                             <Button type="danger">删除</Button>
                         </Popconfirm>
                         </Col>
