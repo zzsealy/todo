@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
-import { Button, Col, Row, Card, Pagination, CardGroup, DatePicker, Divider, Banner } from '@douyinfe/semi-ui';
+import { Button, Col, Row, Card, Pagination, CardGroup, DatePicker, Divider, Banner, Select } from '@douyinfe/semi-ui';
 import { useNavigate  } from 'react-router-dom';
 import constant from '../constant'
 import { requestConfig } from '../utils'
@@ -51,6 +51,8 @@ const TodoList = ({ todoList }) => {
 }
 
 
+
+
 const Home = () => {
     const navigate = useNavigate();
     const [todoLists, setTodoLists] = useState([])
@@ -60,6 +62,15 @@ const Home = () => {
     const [showBanner, setShowBanner] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [todoListNum, setTodoListNum] = useState(0)
+    const [tag, setTag] = useState('')
+    const [filterTag, setFilterTag] = useState('')
+    const [filterFinishStatus, setFilterFinishStatus] = useState('')
+    const tagList = [
+        { value: 'short', label: (<span style={{ 'color': 'rgba(var(--semi-red-5), 1)' }}>{'短期目标'}</span>), otherKey: 1},
+        { value: 'long', label:(<span style={{ 'color': 'rgba(var(--semi-red-5), 1)' }}>{'长期目标'}</span>), otherKey: 2},
+        { value: 'week', label:(<span style={{ 'color': 'rgba(var(--semi-red-5), 1)' }}>{'周目标'}</span>), otherKey: 3},
+        { value: 'month', label:(<span style={{ 'color': 'rgba(var(--semi-red-5), 1)' }}>{'月目标'}</span>), otherKey: 4}
+    ]
 
     const changeShowBanner = () => {
         setShowBanner(!showBanner)
@@ -71,8 +82,28 @@ const Home = () => {
         />
     )
 
+    const filterTagDropDown = [
+        { value: '', label: (<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'全部'}</span>), otherKey: 1},
+        { value: 'short', label: (<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'短期目标'}</span>), otherKey: 1},
+        { value: 'long', label:(<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'长期目标'}</span>), otherKey: 2},
+        { value: 'week', label:(<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'周目标'}</span>), otherKey: 3},
+        { value: 'month', label:(<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'月目标'}</span>), otherKey: 4}
+    ]
+
+    const filterFinishDropDown = [
+        { value: '', label: (<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'全部'}</span>), otherKey: 1},
+        { value: 'process', label: (<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'进行中'}</span>), otherKey: 1},
+        { value: 'finish', label: (<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'完成'}</span>), otherKey: 1},
+    ]
+
     const totalTodoListHooks = () => {
-        const getTodoListPath = `${constant.baseUrl}/todo/todo_lists?page=${currentPage}`
+        let getTodoListPath = `${constant.baseUrl}/todo/todo_lists?page=${currentPage}`
+        if (filterTag) { //标签过滤
+            getTodoListPath = getTodoListPath + `&tag=${filterTag}`
+        }
+        if (filterFinishStatus) {
+            getTodoListPath = getTodoListPath + `&status=${filterFinishStatus}`
+        }
         const config = requestConfig()
         axios.get(getTodoListPath, config)
             .then((res) => {
@@ -103,6 +134,20 @@ const Home = () => {
         setTotoListTitle(inputTitle)
     }
 
+    const handleSelectTag = (value) => {
+        setTag(value)
+    }
+
+    const handleFilterTag = (value) => {
+        setFilterTag(value)
+        setCount(count+1)
+    }
+
+    const handleFilterFinishStatus = (value) => {
+        setFilterFinishStatus(value)
+        setCount(count+1)
+    }
+
     const handleClickPage = (currentPage) => {
         setCurrentPage(currentPage)
         setCount(count+1)
@@ -114,7 +159,8 @@ const Home = () => {
         const config = requestConfig()
         const postData = {
             'title': todoListTitle,
-            'dateString': dateString
+            'dateString': dateString,
+            'tag': tag,
         }
         axios.post(todoListPath, postData, config)
             .then((res) => {
@@ -146,6 +192,8 @@ const Home = () => {
                             <Divider layout="vertical" margin='12px' />
                         <DatePicker onChange={(date, dateString) => setDateString(dateString)} />
                             <Divider layout="vertical" margin='12px'/>
+                        <Select onChange={handleSelectTag} placeholder='选择标签' style={{'width': '140px'}} optionList={tagList} validateStatus='warning'></Select>        
+                            <Divider layout="vertical" margin='12px'/>
                         <Button onClick={() => handleClickCreateTodoList()}>创建TodoList</Button>
                     </form>
                     {/* <Button onClick={() => handleClickCreateTodoList()}> 创建TodoList </Button> */}
@@ -156,6 +204,12 @@ const Home = () => {
                             </div>)}
                     </CardGroup>
                     <Pagination onPageChange={handleClickPage} total={todoListNum} pageSize={12} style={{ marginBottom: 12 }}></Pagination>
+                </Col>
+                <Col span={1} offset={1}>
+                        <Select onChange={handleFilterTag} placeholder='标签' style={{'width': '100px'}} optionList={filterTagDropDown} validateStatus='warning'></Select>        
+                </Col>
+                <Col span={1} offset={1}>
+                        <Select onChange={handleFilterFinishStatus} placeholder='状态' style={{'width': '100px'}} optionList={filterFinishDropDown} validateStatus='warning'></Select>        
                 </Col>
             </Row>
         </div>
