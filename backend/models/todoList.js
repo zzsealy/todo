@@ -22,7 +22,8 @@ const TodoListSchema = new Schema({
     finishRate: String,
     createDateTime: Date,  // 创建时间
     closeDateTime: Date,  // 关闭时间
-    canChange: Boolean
+    canChange: Boolean,
+    tag: String
 })
 
 TodoListSchema.index({ userId: 1 })

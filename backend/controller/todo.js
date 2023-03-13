@@ -11,8 +11,9 @@ todoRouter.get('/todo_lists/:id', async (request, response) => {
         const finishDateString = todoList.finishDate.toLocaleString();
         const dateSplit = finishDateString.split(',')[0].split('/');
         const dateString = `${dateSplit[2]}-${dateSplit[0]}-${dateSplit[1]}`;
+        const tag = todoList.tag;
 
-        return response.status(200).json({'code':200, 'todoList': todoList, 'dateString': dateString})
+        return response.status(200).json({'code':200, 'todoList': todoList, 'dateString': dateString, 'tag': tag})
 })
 
 todoRouter.post('/todo_lists/:id', async (request, response) => {
@@ -43,7 +44,7 @@ const getFinishRate = (totalTodo) => {
 }
 
 todoRouter.put('/todo_lists/:id', async (request, response) => {
-        let { type } = request.body
+        let { type, tag } = request.body
         if (type === 'close') {
             const todoList = await todoListModel.findById(request.params.id).populate('childTodo')
             todoList.canChange = false;
@@ -60,6 +61,13 @@ todoRouter.put('/todo_lists/:id', async (request, response) => {
                     return response.status(200).json({'code':200})
             }
         }
+        if (type === 'tag') {
+            const todoList = await todoListModel.findById(request.params.id).populate('childTodo')
+            todoList.tag = tag;
+            const todoListSave = await todoList.save()
+            return response.status(200).json({'code':200, 'todoList': todoListSave})
+        }
+
 })
 
 const chunkTodoList = (todoLists, page) => {
@@ -71,6 +79,8 @@ todoRouter.get('/todo_lists', async (request, response) => {
        
         const userInfo = request.userInfo
         const currentPage = Number(request.query.page)
+        const tag = request.query.tag
+        const status = request.query.status
         const todoLists = await todoListModel.find({'userId': userInfo.userId}).populate('childTodo').sort('-createDateTime')
         // todoLists.forEach(todoList => {
         //         const finishDateString = todoList.finishDate.toLocaleString();
@@ -78,7 +88,7 @@ todoRouter.get('/todo_lists', async (request, response) => {
         //         const dateString = `${dateSplit[2]}-${dateSplit[0]}-${dateSplit[1]}`;
         //         todoList.dateString = dateString;
         // });
-        const newTotoLists = []
+        let newTotoLists = []
         todoLists.map(todoList => {
                 const finishDateString = todoList.finishDate.toLocaleString();
                 const dateSplit = finishDateString.split(',')[0].split('/');
@@ -89,19 +99,42 @@ todoRouter.get('/todo_lists', async (request, response) => {
                         "id": todoList.id,
                         "childTodo": todoList.childTodo,
                         "canChange": todoList.canChange,
-                        "closeDateTime": todoList.closeDateTime
+                        "closeDateTime": todoList.closeDateTime,
+                        "tag": todoList.tag
                 }
                 newTotoLists.push(newTodoList)
         })
+        if (tag) {
+            const tagFilteredTodoLists = newTotoLists.filter(todoList => todoList.tag===tag)
+            newTotoLists = tagFilteredTodoLists
+        }
+        if (status) {
+            if (status === 'process') { // 进行中
+                const statusFilterTodoLists = newTotoLists.filter(todoList => todoList.canChange === true)
+                newTotoLists = statusFilterTodoLists
+            }
+            if (status === 'finish') { //已经关闭
+                const statusFilterTodoLists = newTotoLists.filter(todoList => todoList.canChange === false)
+                newTotoLists = statusFilterTodoLists
+            }
+        }
         const todoListNum = newTotoLists.length
         return response.status(200).json({'code': 200 , 'todoList': chunkTodoList(newTotoLists, currentPage), "todoListNum": todoListNum })
 })
 
-
+// 创建todoList
 todoRouter.post('/todo_lists', async (request, response) => {
         // const a = await todoListModel.deleteMany({})
-        const { title, dateString } = request.body;
-        if (title && dateString) {
+        /*
+          params: 
+            tag:
+              short:短期目标 
+              long:长期目标 
+              week: 周目标 
+              month:月目标
+        */
+        const { title, dateString, tag } = request.body;
+        if (title && dateString && tag) {
                 const userInfo = request.userInfo
                 const finishDate = new Date(dateString.replace('-', '/'))
                 const todoList = new todoListModel({
@@ -111,6 +144,7 @@ todoRouter.post('/todo_lists', async (request, response) => {
                         childTodo: [],
                         createDateTime: Date(),
                         canChange: true,
+                        tag: tag,
                 })
                 const saveTodoList = await todoList.save()
                 return response.status(200).json({ "code": 200, "saveData": "saveTodoList" })

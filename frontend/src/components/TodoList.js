@@ -2,10 +2,16 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox, Layout, Popconfirm  } from '@douyinfe/semi-ui';
+import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox, Layout, Popconfirm, Select  } from '@douyinfe/semi-ui';
 import { requestConfig } from '../utils'
 import constant from '../constant'
 
+const tagMapping = {
+    'short': '短期目标',
+    'long': '长期目标',
+    'week': '周目标',
+    'month': '月目标'
+}
 
 const TodoList = () => {
     const { Header, Footer, Sider, Content } = Layout
@@ -18,7 +24,9 @@ const TodoList = () => {
     const [count, setCount] = useState(0)
     const [userInfo, setUserInfo] = useState({})
     const [dateString, setDateString] = useState('')
+    const [tag, setTag] = useState('')
     const getTodoListHook = () => {
+        
         const getPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
         axios.get(getPath, config)
             .then((res) => {
@@ -26,6 +34,7 @@ const TodoList = () => {
                     setTodoList(res.data.todoList)
                     setTodos(res.data.todoList.childTodo)
                     setDateString(res.data.dateString)
+                    setTag(res.data.tag)
                     setNewTodo('')
                     document.title = res.data.todoList.title 
                 }
@@ -49,6 +58,14 @@ const TodoList = () => {
             })
     }
     useEffect(getUserInfoDataHook, [])
+
+    const filterTagDropDown = [
+        { value: '', label: (<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'全部'}</span>), otherKey: 1},
+        { value: 'short', label: (<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'短期目标'}</span>), otherKey: 1},
+        { value: 'long', label:(<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'长期目标'}</span>), otherKey: 2},
+        { value: 'week', label:(<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'周目标'}</span>), otherKey: 3},
+        { value: 'month', label:(<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'月目标'}</span>), otherKey: 4}
+    ]
 
     const handleEnterPress = (event) => {
         const value = event.target.value
@@ -84,7 +101,12 @@ const TodoList = () => {
         console.log('item:', todo)
     }
 
-    const handleClickChangeTodoList = (type) => {
+    const handleFilterTag = (value) => {
+        setTag(value)
+        handleClickChangeTodoList('tag', value)
+    }
+
+    const handleClickChangeTodoList = (type, tag=null) => {
         if (type === 'close') { // 关闭
             const todoListPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
             axios.put(todoListPath, { "type": type }, config)
@@ -105,6 +127,16 @@ const TodoList = () => {
                     }
                 })
         }
+        if (type === 'tag') {  // 删除
+            const todoListPath = `${constant.baseUrl}/todo/todo_lists/${params.id}`
+            axios.put(todoListPath, { "type": type, "tag": tag }, config)
+                .then((res) => {
+                    if (res.data.code === 200) {
+                        setCount(count + 1)  // 重新获取todoList， 不能创建新的todo了
+                        navigate('/')
+                    }
+                })
+        }
     }
 
     const onCancel = () => {
@@ -116,13 +148,16 @@ const TodoList = () => {
         <Layout className="components-layout-demo">
             <Header>
                 <Row>  
-                        <Col span={10} offset={7}>
+                        <Col span={7} offset={7}>
                             <h1 style={{ 'maxWidth': '100%', "color": "#000", "display":"inline", }}>{todoList.title}</h1>
                         </Col>
-                        <Col span={3} offset={1}>
-                        <h1 style={{ 'maxWidth': '100%', "color": "rgba(var(--semi-lime-5), 1)", "display":"inline", }}>{dateString}</h1>
+                        <Col span={1}>
+                            <Select onChange={handleFilterTag} placeholder={tagMapping[tag]} style={{'width': '120px'}} optionList={filterTagDropDown} validateStatus='warning'></Select>        
                         </Col>
-                    <Col span={2} offset={1}>
+                        <Col span={3} offset={2}>
+                            <h1 style={{ 'maxWidth': '100%', "color": "rgba(var(--semi-lime-5), 1)", "display":"inline", }}>{dateString}</h1>
+                        </Col>
+                    <Col span={2}>
                         <Popconfirm
                             title="确认关闭这个待办集合？"
                             content="此修改不可逆,关闭之后这个待办集合不再支持修改待办。"
