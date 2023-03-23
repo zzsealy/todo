@@ -2,7 +2,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox, Layout, Popconfirm, Select  } from '@douyinfe/semi-ui';
+import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox, Layout, Popconfirm, Select, Divider } from '@douyinfe/semi-ui';
 import { requestConfig } from '../utils'
 import constant from '../constant'
 
@@ -13,16 +13,63 @@ const tagMapping = {
     'month': '月目标'
 }
 
+const SingleTodo = ({todo, userInfo, count, setCount}) => {
+    const config = requestConfig()
+    const [enterTodoId, setEnterTodoId] = useState('')
+
+    const handleFinishTodoCheck = ({ checked, todo }) => {
+        // const checkStatus = checked.target.checked;
+        const todoId = todo.id
+        const changeTodoStatusPath = `${constant.baseUrl}/todo/todo/${todoId}`
+        axios.put(changeTodoStatusPath, {}, config)
+            .then((res) => {
+                if(res.data.code === 200) {
+                    setCount(count+1) // 更新列表
+                }
+            })
+        console.log('checked:', checked)
+        console.log('item:', todo)
+    }
+
+    const handleEnterTodo = (todoId) => {
+        setEnterTodoId(todoId)
+    }
+
+    const handleLeaveTodo = (todoId) => {
+        setEnterTodoId('')
+    }
+    return (
+        <div
+            // onMouseEnter={handleEnterTodo(todo.id)}
+            // onMouseLeave={handleLeaveTodo(todo.id)}
+            style={{'width': '100%'}}
+        >
+            <Avatar style={{ 'display': 'inline-block;' }} color="red" alt={userInfo.name}>{userInfo.name}</Avatar>
+                {
+                    todo.isFinish
+                        ? <h3 style={{ color: 'rgba(var(--semi-grey-7), 1)', fontWeight: 600, 'textDecoration': 'line-through', 'display':'inline', 'marginLeft': '10px' }}>{todo.content}</h3>
+                        : <h3 style={{ color: 'rgba(var(--semi-grey-3), 1)', fontWeight: 600, 'display':'inline', 'marginLeft': '10px' }}>{todo.content}</h3>
+            }
+            {todo.isFinish
+                ? <Checkbox style={{ 'display':'inline', 'float': 'right' }} defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                : <Checkbox style={{ 'display':'inline', 'float': 'right'}} onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+            }
+            {enterTodoId == todo.id ? <Button>删除</Button> : ''}
+            <Divider margin='10px'/>
+        </div>
+    )
+}
+
 const TodoList = () => {
     const { Header, Footer, Sider, Content } = Layout
     const navigate = useNavigate();
     const config = requestConfig()
     const params = useParams()
+    const [userInfo, setUserInfo] = useState({})
     const [todoList, setTodoList] = useState({})
     const [newTodo, setNewTodo] = useState('')
     const [todos, setTodos] = useState([])
     const [count, setCount] = useState(0)
-    const [userInfo, setUserInfo] = useState({})
     const [dateString, setDateString] = useState('')
     const [tag, setTag] = useState('')
     const getTodoListHook = () => {
@@ -87,19 +134,7 @@ const TodoList = () => {
     }
 
 
-    const handleFinishTodoCheck = ({ checked, todo }) => {
-        // const checkStatus = checked.target.checked;
-        const todoId = todo.id
-        const changeTodoStatusPath = `${constant.baseUrl}/todo/todo/${todoId}`
-        axios.put(changeTodoStatusPath, {}, config)
-            .then((res) => {
-                if(res.data.code === 200) {
-                    setCount(count+1) // 更新列表
-                }
-            })
-        console.log('checked:', checked)
-        console.log('item:', todo)
-    }
+    
 
     const handleFilterTag = (value) => {
         setTag(value)
@@ -180,32 +215,8 @@ const TodoList = () => {
                 <Content>
                     <Row>
                         <Col span={10} offset={7}>
-                            <List
-                            dataSource={todos}
-                            renderItem={todo => (
-                                <List.Item
-                                    header={<Avatar color="blue">{userInfo.name}</Avatar>}
-                                    main={
-                                        <div>
-                                            {
-                                                todo.isFinish
-                                                ?<h2 style={{ color: 'rgba(var(--semi-grey-7), 1)', fontWeight: 600, 'textDecoration': 'line-through' }}>{todo.content}</h2>
-                                                :<h2 style={{ color: 'rgba(var(--semi-grey-3), 1)', fontWeight: 600,  }}>{todo.content}</h2>
-                                            }
-                                        </div>
-                                    }
-                                    extra={
-                                        <ButtonGroup theme="borderless">
-                                            {todo.isFinish
-                                                ?<Checkbox defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
-                                                :<Checkbox onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
-                                            }
-                                        </ButtonGroup>
-                                    }
-                                />
-                                )}
-                            />
-                                <Input insetLabel='新todo(回车创建):' value={newTodo} onChange={handleInputTodo} onEnterPress={handleEnterPress}></Input> 
+                            {todos.map(todo => <SingleTodo key={todo.id} todo={todo} userInfo={userInfo} count={count} setCount={setCount} />)}
+                            <Input insetLabel='新todo(回车创建):' value={newTodo} onChange={handleInputTodo} onEnterPress={handleEnterPress}></Input> 
                         </Col>
                     </Row>
                 </Content>
