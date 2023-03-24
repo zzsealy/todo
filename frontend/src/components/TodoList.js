@@ -16,11 +16,11 @@ const tagMapping = {
 const SingleTodo = ({ todo, userInfo, count, setCount }) => {
     const config = requestConfig()
     const [showButton, setShowButton] = useState(false)
-    const avatarColor = [['amber', 'DarkRed'], ['red', '#fde3cf'], ['green', 'red'], ['#f56a00', '#fde3cf'], ['light-blue', 'DarkRed']]
-    const lengthColor = avatarColor.length
-    const colorList = avatarColor[Math.floor(Math.random()*lengthColor)]
-    const color = colorList[0]
-    const backgroundColor = colorList[1]
+    // const avatarColor = [['amber', 'DarkRed'], ['red', '#fde3cf'], ['green', 'red'], ['#f56a00', '#fde3cf'], ['light-blue', 'DarkRed']]
+    // const lengthColor = avatarColor.length
+    // const colorList = avatarColor[Math.floor(Math.random()*lengthColor)]
+    // const color = colorList[0]
+    // const backgroundColor = colorList[1]
 
 
     const handleFinishTodoCheck = ({ checked, todo }) => {
@@ -45,7 +45,8 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
         setShowButton(false)
     }
 
-    const deleteTodo = (todoId) => {
+    const deleteTodo = (todo) => {
+        const todoId = todo.id;
         const delTodoPath = `${constant.baseUrl}/todo/todo/${todoId}`
         axios.delete(delTodoPath, config)
             .then((res) => {
@@ -61,7 +62,7 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
             onMouseLeave={handleHideButton}
             style={{'width': '100%'}}
         >
-            <Avatar style={{ 'display': 'inline-block' }} color={color} backgroundColor={backgroundColor} alt={userInfo.name}>{userInfo.name}</Avatar>
+            <Avatar style={{ 'display': 'inline-block', 'color' :'red','backgroundColor': '#fde3cf' }}  alt={userInfo.name}>{userInfo.name}</Avatar>
                 {
                     todo.isFinish
                         ? <h3 style={{ color: 'rgba(var(--semi-grey-7), 1)', fontWeight: 600, 'textDecoration': 'line-through', 'display':'inline-block', 'marginLeft': '10px' }}>{todo.content}</h3>
@@ -71,7 +72,7 @@ const SingleTodo = ({ todo, userInfo, count, setCount }) => {
                 ? <Checkbox style={{ 'display':'inline-block', 'float': 'right' }} defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
                 : <Checkbox style={{ 'display':'inline-block', 'float': 'right'}} onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
             }
-            {showButton ? <div onClick={() => deleteTodo(todo.id)}><Button type="danger" style={{ 'float': 'right' }}>删除</Button></div> : null}
+            {showButton ? <div onClick={() => deleteTodo(todo)}><Button type="danger" style={{ 'float': 'right' }}>删除</Button></div> : null}
             <Divider margin='10px'/>
         </div>
     )

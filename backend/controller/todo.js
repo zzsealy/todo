@@ -162,7 +162,7 @@ todoRouter.put('/todo/:id', async (request, response) => {
 })
 
 todoRouter.delete('/todo/:id', async (request, response) => {
-        const delResult = await todoModel.deleteOne(filter = { 'id': request.params.id })
+        const delResult = await todoModel.deleteOne({ '_id': request.params.id })
         if (delResult) {
           return response.status(200).json({ "code": 200 })
         }
