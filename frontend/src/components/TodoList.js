@@ -1,8 +1,8 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import { Button, Toast, Col, Row, List, Avatar, ButtonGroup, Input, Checkbox, Layout, Popconfirm, Select, Divider } from '@douyinfe/semi-ui';
+import { Button, Toast, Col, Row, Avatar, Input, Checkbox, Layout, Popconfirm, Select, Divider } from '@douyinfe/semi-ui';
 import { requestConfig } from '../utils'
 import constant from '../constant'
 
@@ -13,9 +13,15 @@ const tagMapping = {
     'month': '月目标'
 }
 
-const SingleTodo = ({todo, userInfo, count, setCount}) => {
+const SingleTodo = ({ todo, userInfo, count, setCount }) => {
     const config = requestConfig()
-    const [enterTodoId, setEnterTodoId] = useState('')
+    const [showButton, setShowButton] = useState(false)
+    const avatarColor = [['amber', 'DarkRed'], ['red', '#fde3cf'], ['green', 'red'], ['#f56a00', '#fde3cf'], ['light-blue', 'DarkRed']]
+    const lengthColor = avatarColor.length
+    const colorList = avatarColor[Math.floor(Math.random()*lengthColor)]
+    const color = colorList[0]
+    const backgroundColor = colorList[1]
+
 
     const handleFinishTodoCheck = ({ checked, todo }) => {
         // const checkStatus = checked.target.checked;
@@ -31,30 +37,41 @@ const SingleTodo = ({todo, userInfo, count, setCount}) => {
         console.log('item:', todo)
     }
 
-    const handleEnterTodo = (todoId) => {
-        setEnterTodoId(todoId)
+    const handleShowButton = () => {
+        setShowButton(true)
     }
 
-    const handleLeaveTodo = (todoId) => {
-        setEnterTodoId('')
+    const handleHideButton = (todoId) => {
+        setShowButton(false)
     }
+
+    const deleteTodo = (todoId) => {
+        const delTodoPath = `${constant.baseUrl}/todo/todo/${todoId}`
+        axios.delete(delTodoPath, config)
+            .then((res) => {
+                if(res.data.code === 200) {
+                    setCount(count+1) // 更新列表
+                }
+            })
+    }
+
     return (
         <div
-            // onMouseEnter={handleEnterTodo(todo.id)}
-            // onMouseLeave={handleLeaveTodo(todo.id)}
+            onMouseEnter={handleShowButton}
+            onMouseLeave={handleHideButton}
             style={{'width': '100%'}}
         >
-            <Avatar style={{ 'display': 'inline-block;' }} color="red" alt={userInfo.name}>{userInfo.name}</Avatar>
+            <Avatar style={{ 'display': 'inline-block' }} color={color} backgroundColor={backgroundColor} alt={userInfo.name}>{userInfo.name}</Avatar>
                 {
                     todo.isFinish
-                        ? <h3 style={{ color: 'rgba(var(--semi-grey-7), 1)', fontWeight: 600, 'textDecoration': 'line-through', 'display':'inline', 'marginLeft': '10px' }}>{todo.content}</h3>
-                        : <h3 style={{ color: 'rgba(var(--semi-grey-3), 1)', fontWeight: 600, 'display':'inline', 'marginLeft': '10px' }}>{todo.content}</h3>
+                        ? <h3 style={{ color: 'rgba(var(--semi-grey-7), 1)', fontWeight: 600, 'textDecoration': 'line-through', 'display':'inline-block', 'marginLeft': '10px' }}>{todo.content}</h3>
+                        : <h3 style={{ color: 'rgba(var(--semi-grey-3), 1)', fontWeight: 600, 'display':'inline-block', 'marginLeft': '10px' }}>{todo.content}</h3>
             }
             {todo.isFinish
-                ? <Checkbox style={{ 'display':'inline', 'float': 'right' }} defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
-                : <Checkbox style={{ 'display':'inline', 'float': 'right'}} onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                ? <Checkbox style={{ 'display':'inline-block', 'float': 'right' }} defaultChecked onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
+                : <Checkbox style={{ 'display':'inline-block', 'float': 'right'}} onChange={checked => handleFinishTodoCheck({ checked, todo })}></Checkbox>
             }
-            {enterTodoId == todo.id ? <Button>删除</Button> : ''}
+            {showButton ? <div onClick={() => deleteTodo(todo.id)}><Button type="danger" style={{ 'float': 'right' }}>删除</Button></div> : null}
             <Divider margin='10px'/>
         </div>
     )
@@ -184,13 +201,13 @@ const TodoList = () => {
             <Header>
                 <Row>  
                         <Col span={7} offset={7}>
-                            <h1 style={{ 'maxWidth': '100%', "color": "#000", "display":"inline", }}>{todoList.title}</h1>
+                            <h1 style={{ 'maxWidth': '100%', "color": "#000", "display":"inline-block", }}>{todoList.title}</h1>
                         </Col>
                         <Col span={1}>
                             <Select onChange={handleFilterTag} placeholder={tagMapping[tag]} style={{'width': '120px'}} optionList={filterTagDropDown} validateStatus='warning'></Select>        
                         </Col>
                         <Col span={3} offset={2}>
-                            <h1 style={{ 'maxWidth': '100%', "color": "rgba(var(--semi-lime-5), 1)", "display":"inline", }}>{dateString}</h1>
+                            <h1 style={{ 'maxWidth': '100%', "color": "rgba(var(--semi-lime-5), 1)", "display":"inline-block", }}>{dateString}</h1>
                         </Col>
                     <Col span={2}>
                         <Popconfirm
