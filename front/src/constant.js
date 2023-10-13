@@ -1,5 +1,5 @@
-// const baseUrl = "http://www.dairuiquan.xyz/api"
-const baseUrl = "http://localhost:8003"
+const baseUrl = "https://www.dairuiquan.xyz/api"
+// const baseUrl = "http://localhost:8003"
 
 const statusCode = {
     "OK": 200, 
