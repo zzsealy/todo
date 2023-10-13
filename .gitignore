@@ -1,4 +1,5 @@
 */node_modules
-
+/backend/venv/
+*.pyc
 *.Ds_store
 /backend/data
