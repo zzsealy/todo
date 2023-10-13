@@ -1,4 +1,4 @@
-const baseUrl = "https://www.dairuiquan.xyz/api"
+const baseUrl = "https://www.dairuiquan.xyz"
 // const baseUrl = "http://localhost:8003"
 
 const statusCode = {
