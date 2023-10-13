@@ -102,7 +102,7 @@ class GetTodoListSerializer(Serializer):
 
     
     def get_child_todo(self, obj):
-        list_id = obj.get('id')
+        list_id = obj.id
         sub_todo = Todo.objects.filter(list_id=list_id)
         sub_todo_list = [model_to_dict(todo) for todo in sub_todo]
         for todo in sub_todo_list:
@@ -113,7 +113,7 @@ class GetTodoListSerializer(Serializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance=instance)
         # rep['date_string'] = instance.get('expect_finish_date')
-        rep['tag'] = TagConstant(int(instance.get('tag'))).name.lower()
-        rep['can_change'] = True if instance.get('is_close') == 0 else False
+        rep['tag'] = TagConstant(int(instance.tag)).name.lower()
+        rep['can_change'] = True if instance.is_close == 0 else False
         return rep
     
