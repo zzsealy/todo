@@ -21,6 +21,7 @@ class Middleware(MiddlewareMixin):
     
     def verify_login_validity(self, request):
         token_key = request.META.get('HTTP_AUTHORIZATION', None)
+        print(request.path)
         url_info = settings.URL_NOT_VERIFICATION_LIST.get(request.path)
         status = self.verify_bearer_token(token_key=token_key)
         if url_info and request.method in url_info:
