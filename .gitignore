@@ -4,3 +4,4 @@
 *.Ds_store
 /backend/data
 /backend/backend/localsetting.py
+/.vscode/
