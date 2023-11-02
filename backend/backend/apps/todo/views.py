@@ -20,7 +20,7 @@ class TodoLists(viewsets.ModelViewSet):
     filterset_class = TodoListFilter
 
     def get_queryset(self, user_id=None):
-        return self.queryset.filter(user_id=user_id)
+        return self.queryset.filter(user_id=user_id).order_by('expect_finish_date')
     
     def list(self, request):
         queryset = self.filter_queryset(self.get_queryset(user_id=request.user_id))
