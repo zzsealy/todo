@@ -5,3 +5,4 @@
 /backend/data
 /backend/backend/localsetting.py
 /.vscode/
+/front/src/constant.js
