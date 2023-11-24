@@ -10,9 +10,8 @@ class User(AbstractUser):
     email = models.CharField(help_text='邮箱', max_length=100)
     nick_name = models.CharField(help_text='昵称', max_length=20)
 
-    class Meta:
-        db_table = "user"
-
+    def __str__(self):
+        return f"<User: {self.id} - {self.email}"
 
 class UserEmailVerCode(models.Model):
     user_id = models.IntegerField(db_index=True, help_text='user表的id')
