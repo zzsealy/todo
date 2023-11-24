@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'api',
     'user',
-    'snippets',
+    # 'snippets',
     'blog',
     'todo',
     'corsheaders',

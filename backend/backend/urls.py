@@ -38,7 +38,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('', include('snippets.urls')),
+    # path('', include('snippets.urls')),
     path('', include('user.urls')),
     path('', include('blog.urls')),
     path('todo/', include('todo.urls')),
