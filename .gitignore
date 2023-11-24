@@ -1,5 +1,6 @@
 */node_modules
 /backend/venv/
+/backend/uwsgi/
 *.pyc
 *.Ds_store
 /backend/data
