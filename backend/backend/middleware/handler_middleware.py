@@ -34,6 +34,7 @@ class Middleware(MiddlewareMixin):
         if not token_key:
             return {'user_id': None, 'result': False}
         token = token_key.split(' ')[1]
+        
         result = verify_bearer_token(token=token)
         if result:
             is_expire = self.checkout_token_time(result.get('exp_time'))
