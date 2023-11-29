@@ -57,5 +57,5 @@ class UserInfo(APIView):
     
     def get(self, request):
         user_id = request.user_id
-        user = User.objects.get(id=user_id)
+        user = User.objects.filter(id=user_id).first()
         return Response(data={'status_code':StatusCode.OK.value, 'id':user.id, 'name': user.nick_name})

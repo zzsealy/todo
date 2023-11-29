@@ -122,8 +122,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 URL_NOT_VERIFICATION_LIST = {
-    '/users/register': ['POST'],
-    '/users/login': ['POST'],
+    '/api/users/register': ['POST'],
+    '/api/users/login': ['POST'],
     '/doces': ['GET'],
     '/swagger/': ['GET']
 

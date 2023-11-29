@@ -9,5 +9,5 @@ todo_list_router.register('todo', ChildTodoViewset, basename='todo')
 todo_list_router.register('todo_list', TodoLists, basename='todo_list')
 
 urlpatterns = [
-    path('', include(todo_list_router.urls)),
+    path('todo/', include(todo_list_router.urls)),
 ]
