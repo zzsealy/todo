@@ -16,6 +16,7 @@ class UserDal(BaseDal):
     def create_one_obj(self, create_info, db_select=None, **kwargs):
         password = create_info.get('password')
         create_info['password'] = self.generate_password(password=password)
+        create_info['username'] = create_info['email']
         return super().create_one_obj(create_info, db_select, **kwargs) 
     
     def check_password(self, hash_password, password):
