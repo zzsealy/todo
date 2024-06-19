@@ -33,7 +33,10 @@ class Middleware(MiddlewareMixin):
     def verify_bearer_token(self, token_key):
         if not token_key:
             return {'user_id': None, 'result': False}
-        token = token_key.split(' ')[1]
+        try:
+            token = token_key.split(' ')[1]
+        except:
+            token = token_key
         
         result = verify_bearer_token(token=token)
         if result:

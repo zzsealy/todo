@@ -10,6 +10,9 @@ from backend.utils.constants.status_code import StatusCode
 from todo.serializers import TodoSerializer, TodoListSerializer, GetTodoListSerializer
 from todo.filters import TodoListFilter, TodoFilter
 from todo.models import Todo, TodoList
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework.decorators import action
 # Create your views here.
 
 
@@ -41,6 +44,7 @@ class TodoLists(viewsets.ModelViewSet):
             return todo_lists
 
     def create(self, request):
+        print('进来了')
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -81,6 +85,7 @@ class ChildTodoViewset(
         queryset = Todo.objects.all()
         return queryset
 
+    @swagger_auto_schema(auto_schema=None)
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
@@ -89,7 +94,35 @@ class ChildTodoViewset(
     # def delete(self, request, id):
     #     Todo.objects.get(id=id).delete()
     #     return Response({'status_code': StatusCode.OK.value, 'message': '修改成功'})
-    
+
+    # @action(methods=['post'], detail=False)
+    @swagger_auto_schema(
+        # method='post',
+        operation_summary='创建子todo',
+        operation_description='子todo是父todo_list的一部分，根据list_id绑定子父todo_list',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['list_id', 'todoContent'],
+            properties={
+                'list_id': openapi.Schema(type=openapi.TYPE_INTEGER, description="父todo的ID"),
+                'todoContent': openapi.Schema(type=openapi.TYPE_STRING, description="Todo内容")
+            },
+        ),
+        responses={
+                200: openapi.Response(
+                description="Todo successfully created",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'status_code': openapi.Schema(default=200, type=openapi.TYPE_INTEGER, description="Status code"),
+                        'todo_list': openapi.Schema(type=openapi.TYPE_OBJECT, description="Detailed todo list data"),
+                        'message': openapi.Schema(type=openapi.TYPE_STRING, description="Status message")
+                    }
+                )
+            ),
+            400: openapi.Response(description="Invalid data received")
+        }
+    )
     def create(self, request):
         data = request.data
         list_id = data.get('list_id')
