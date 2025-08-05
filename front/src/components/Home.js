@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Button, Col, Row, Card, Pagination, CardGroup, DatePicker, Divider, Banner, Select } from '@douyinfe/semi-ui';
 import { useNavigate  } from 'react-router-dom';
 import {statusCode, constant} from '../constant'
 import { requestConfig } from '../utils'
@@ -183,7 +182,6 @@ const Home = () => {
     }
     return (
         <div className='grid'>
-            <Row>
                 {showBanner? createTodoListErrorBanner: null}
                 <Col span={14} offset={4}>
                     <form style={{'border': '1px solid', 'color': "#c8c8c8", 'marginBottom': '20px'}}>
@@ -210,7 +208,6 @@ const Home = () => {
                 <Col span={1} offset={1}>
                         <Select onChange={handleFilterFinishStatus} placeholder='状态' style={{'width': '100px'}} optionList={filterFinishDropDown} validateStatus='warning'></Select>        
                 </Col>
-            </Row>
         </div>
     )
 }

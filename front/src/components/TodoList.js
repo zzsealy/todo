@@ -214,7 +214,6 @@ const TodoList = () => {
     return (
         <Layout className="components-layout-demo">
             <Header>
-                <Row>  
                         <Col span={7} offset={7}>
                             <h1 style={{ 'maxWidth': '100%', "color": "#000", "display":"inline-block", }}>{todoList.title}</h1>
                         </Col>
@@ -240,7 +239,6 @@ const TodoList = () => {
                             <Button type="danger">删除</Button>
                         </Popconfirm>
                         </Col>
-                </Row>
             </Header>
             <Layout>
                 <Sider></Sider>
