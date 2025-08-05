@@ -13,6 +13,9 @@ class User(AbstractUser):
     def __str__(self):
         return f"<User: {self.id} - {self.email}"
 
+    class Meta:
+        db_table = 'user'
+
 class UserEmailVerCode(models.Model):
     user_id = models.IntegerField(db_index=True, help_text='user表的id')
     ver_code = models.CharField(max_length=6, help_text='验证码')

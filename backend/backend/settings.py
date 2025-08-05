@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'api',
     'user',
     # 'snippets',
-    'blog',
     'todo',
     'corsheaders',
     'django_filters'
@@ -71,6 +70,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
  'http://127.0.0.1:8080',
  'http://localhost:8080',
+ 'http://localhost:3000',
  'http://localhost:3001',
 )
 

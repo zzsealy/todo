@@ -121,7 +121,7 @@ const TodoList = () => {
                 }
             })
     }
-    useEffect(getTodoListHook, [count])
+    useEffect(getTodoListHook, [count, config, navigate, params.id])
 
     const getUserInfoDataHook = () => {
         const getUserInfoPath = `${constant.baseUrl}/users/user_info`
@@ -135,7 +135,7 @@ const TodoList = () => {
                 }
             })
     }
-    useEffect(getUserInfoDataHook, [])
+    useEffect(getUserInfoDataHook, [config, navigate])
 
     const filterTagDropDown = [
         { value: '', label: (<span style={{ 'color': 'rgba(var(--semi-light-blue-4), 1)' }}>{'全部'}</span>), otherKey: 1},

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Button, Col, Row, Card, Pagination, CardGroup, DatePicker, Divider, Banner, Select } from '@douyinfe/semi-ui';
 import { useNavigate  } from 'react-router-dom';
@@ -119,7 +119,7 @@ const Home = () => {
             })
         document.title = '待办事项|DRQ'
     }
-    useEffect(totalTodoListHooks, [count, todoListNum, currentPage, navigate])
+    useEffect(totalTodoListHooks, [count, todoListNum, currentPage, navigate, filterFinishStatus, filterTag])
 
     const handleClickTodoList = ({todoList}) => {
         // 点击单个的todo list 跳转到todo list 详情
